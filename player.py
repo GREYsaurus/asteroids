@@ -23,28 +23,40 @@ class Player(CircleShape):
 
     def update(self, dt):
         keys = pygame.key.get_pressed()
+        speed = PLAYER_SPEED
+        if hasattr(self, "speed_boost") and self.speed_boost:
+            speed *= 2
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            self.move(dt)
+            self.move(dt, speed)
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            self.move(-dt)
+            self.move(-dt, speed)
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             self.rotate(-dt)
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             self.rotate(dt)
         if self.shoot_timer > 0:
             self.shoot_timer -= dt
+        cooldown = PLAYER_SHOOT_COOLDOWN
+        if hasattr(self, "powered_up") and self.powered_up:
+            cooldown = PLAYER_SHOOT_COOLDOWN / 3
         if keys[pygame.K_SPACE] and self.shoot_timer <= 0:
+            self.shoot_timer = cooldown
             self.shoot()
 
     def shoot(self):
+        from constants import SHOT_RADIUS
         shot = Shot(self.position.x, self.position.y)
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         shot.velocity = forward * PLAYER_SHOOT_SPEED
+        if hasattr(self, "bigshot") and self.bigshot:
+            shot.radius = SHOT_RADIUS * 2  # Make the bullet bigger
         self.shoot_timer = PLAYER_SHOOT_COOLDOWN  # Reset cooldown
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
 
-    def move(self, dt):
+    def move(self, dt, speed=None):
+        if speed is None:
+            speed = PLAYER_SPEED
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        self.position += forward * PLAYER_SPEED * dt
+        self.position += forward * speed * dt
