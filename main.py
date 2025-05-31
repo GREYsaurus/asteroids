@@ -12,6 +12,7 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+    font = pygame.font.SysFont(None, 36)  # For score display
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -27,6 +28,7 @@ def main():
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
+    score = 0
     dt = 0
 
     while True:
@@ -39,7 +41,7 @@ def main():
         # Player-asteroid collision
         for asteroid in asteroids:
             if asteroid.collides_with(player):
-                print("Game over!")
+                print("Game over! Final Score:", score)
                 sys.exit()
 
         # Bullet-asteroid collision
@@ -58,11 +60,16 @@ def main():
                         a2.velocity = v2
                     asteroid.kill()
                     shot.kill()
+                    score += 100  # Add points for destroying an asteroid
 
         screen.fill("black")
 
         for obj in drawable:
             obj.draw(screen)
+
+        # Draw score
+        score_surf = font.render(f"Score: {score}", True, (255, 255, 255))
+        screen.blit(score_surf, (10, 10))
 
         pygame.display.flip()
 
