@@ -62,13 +62,13 @@ def main():
                     shot.kill()
                     score += 100  # Add points for destroying an asteroid
 
-        screen.fill("black")
+        screen.fill(BG_COLOR)
 
         for obj in drawable:
             obj.draw(screen)
 
         # Draw score
-        score_surf = font.render(f"Score: {score}", True, (255, 255, 255))
+        score_surf = font.render(f"Score: {score}", True, SCORE_COLOR)
         screen.blit(score_surf, (10, 10))
 
         pygame.display.flip()

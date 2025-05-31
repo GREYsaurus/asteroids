@@ -14,3 +14,9 @@ PLAYER_SHOOT_SPEED = 500
 PLAYER_SHOOT_COOLDOWN = 0.3
 
 SHOT_RADIUS = 5
+
+PLAYER_COLOR = (0, 255, 255)      # Cyan
+ASTEROID_COLOR = (255, 165, 0)    # Orange
+SHOT_COLOR = (255, 0, 255)        # Magenta
+BG_COLOR = (30, 30, 60)           # Dark blue
+SCORE_COLOR = (255, 255, 0)       # Yellow
